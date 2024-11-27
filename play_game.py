@@ -22,8 +22,11 @@ if __name__ == "__main__":
         else:
             move = player2.get_move(game)
 
-        game.make_move(*move)
+        if move is None:  # when there's no legal move or game will be a draw anyway
+            print("There's no legal move on board!")
+            break
 
+        game.make_move(*move)
         winner = game.check_winner()
 
         if game.is_draw(winner):

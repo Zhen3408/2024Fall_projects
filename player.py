@@ -1,6 +1,7 @@
 from pentago import Pentago
 import numpy as np
 from typing import Tuple, Optional
+import random
 
 
 class HumanPlayer:
@@ -48,14 +49,27 @@ class AIPlayer:
         self.player_number = 1 if self.player_id == 1 else 2  # for clear print
         self.depth = depth
 
-    def get_move(self, game: Pentago) -> Tuple[int, int, int, int]:
+    def get_move(self, game: Pentago) -> tuple[int, int, int, int] | None:
         """
         Determines the best move using Minimax with Alpha-Beta Pruning.
         :param game: The current game instance.
         :return: A tuple (row, col, quadrant, direction)
         """
         print(f"AI Player #{self.player_number} turn:")
+
         best_value, best_move = self.minimax(game, self.depth, -float('inf'), float('inf'), True)
+
+        if best_move is None:
+            #  No optimal move left. Choosing a random legal move to fill the board.
+            try:
+                empty_positions = game.get_empty_positions()
+                row, col = random.choice(empty_positions)
+                quadrant = random.choice([0, 1, 2, 3])
+                direction = random.choice([-1, 1])
+                best_move = (row, col, quadrant, direction)
+            except:
+                return None
+
         print(f"AI Players move detail: \n"
               f"row {best_move[0]}, "
               f"col {best_move[1]}, "
@@ -113,6 +127,8 @@ class AIPlayer:
                             if beta <= alpha:  # pruning, AI won't want to dig deeper
                                 break
 
+        if best_move is None:
+            return 0, None
         return best_value, best_move
 
     def heuristic(self, game: Pentago) -> float | int:

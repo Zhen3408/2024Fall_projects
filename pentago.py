@@ -1,7 +1,7 @@
 import random
 import math
 import numpy as np
-from typing import Union
+from typing import Union, List
 
 
 class Pentago:
@@ -9,7 +9,7 @@ class Pentago:
         """
         :param current_player:
         :param quadrant_start: indicate the top-left corner cell coordinate of each quadrant, there are four quadrants ,
-        I assume the top-left one is number 0, top-right one is number 1, bottom-left one is number 3, and bottom-right
+        I assume the top-left one is number 0, top-right one is number 1, bottom-left one is number 2, and bottom-right
         one is number 3.
         """
         self.board_size = 6
@@ -129,11 +129,30 @@ class Pentago:
 
         return False
 
+    def is_draw(self, winner) -> bool:
+        """
+        check if the board is full and no winner
+        """
+        if winner is False and not (self.board == 0).any():
+            return True
+        return False
 
-if __name__ == "__main__":
-    penta = Pentago()
-    penta.make_move(0,0,0,1)
-    print(penta.board)
+    def get_empty_positions(self) -> list[tuple]:
+        """
+        Returns a list of all empty positions (value=0) on the board using numpy.
+        :return: List of (row, col) tuples representing empty positions.
+        """
+        return [tuple(pos) for pos in np.argwhere(self.board == 0)]
 
-
-
+# if __name__ == "__main__":
+#     game = Pentago()
+#     game.board = np.array([
+#         [1, 1, 1, 1, -1, 1],
+#         [-1, -1, -1, 1, -1, 1],
+#         [-1, -1, -1, 1, -1, -1],
+#         [1, -1, 1, 1, 1, 1],
+#         [1, -1, 1, -1, -1, -1],
+#         [-1, 1, -1, 1, -1, 1]
+#     ])
+#
+#     print("Is draw:", game.is_draw(game.check_winner()))  #  True
