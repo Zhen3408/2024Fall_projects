@@ -15,7 +15,7 @@ if __name__ == "__main__":
     player1 = HumanPlayer(1) if game_mode in [1,2] else AIPlayer(1, depth=2)
     player2 = HumanPlayer(-1) if game_mode == 1 else AIPlayer(-1, depth=2)
 
-    while not game.check_winner():
+    while True:
         print(game.board)
         if game.current_player == player1.player_id:
             move = player1.get_move(game)
@@ -31,6 +31,7 @@ if __name__ == "__main__":
 
         if game.is_draw(winner):
             print("This game is a draw!")
+            print(game.board)
             break
 
         if winner:

@@ -156,29 +156,34 @@ class AIPlayer:
             # Diagonals
             for row in range(game.board_size - game.win_length + 1):
                 for col in range(game.board_size - game.win_length + 1):
-                    score += factor * self.evaluate_line(np.diagonal(game.board[row:row+game.win_length, col:col+game.win_length]), player)
-                    score += factor * self.evaluate_line(np.diagonal(np.fliplr(game.board[row:row+game.win_length, col:col+game.win_length])), player)
-
+                    diag1 = np.diagonal(game.board[row:row + game.win_length, col:col + game.win_length])
+                    diag2 = np.diagonal(np.fliplr(game.board[row:row + game.win_length, col:col + game.win_length]))
+                    score += factor * self.evaluate_line(diag1, player)
+                    score += factor * self.evaluate_line(diag2, player)
         return score
 
     def evaluate_line(self, line: np.ndarray, player: int) -> int:
         """
         Evaluates a single line (row, column, or diagonal) for potential scores.
         :param line: A line from the board.
-        :param player: The player to evaluate for (1 or -1).
+        :param player: The player id to evaluate for (1 or -1).
         :return: Score for the given line.
         """
         score = 0
-        count = 0
-        for cell in line:
-            if cell == player:
-                count += 1
-            elif cell == 0:
-                continue
-            else:
-                count = 0  # Opponent's piece blocks the line
+        opponent = -player
+        win_length = 5
 
-            if count > 0:
-                score += 10 ** count  # Exponential scaling for longer streaks
+        # Sliding window over the line to evaluate all possible 5-length segments
+        for i in range(len(line) - win_length + 1):
+            window = line[i:i + win_length]
+
+            # Count player and opponent pieces in the segment of 5 cells
+            player_count = np.sum(window == player)
+            opponent_count = np.sum(window == opponent)
+
+            if opponent_count == 0:  # When no opponent piece blocks in this segment, possibly win
+                score += 10 ** player_count  # Exponential scaling for player's pieces
+            elif player_count == 0:  # When no own piece in this segment
+                score -= 5 ** opponent_count  # Exponential scaling for opponent's pieces
 
         return score

@@ -132,6 +132,7 @@ class Pentago:
     def is_draw(self, winner) -> bool:
         """
         check if the board is full and no winner
+        :return True if board is full and exists no winner, False if exists winner
         """
         if winner is False and not (self.board == 0).any():
             return True
