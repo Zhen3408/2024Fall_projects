@@ -145,6 +145,35 @@ class Pentago:
         """
         return [tuple(pos) for pos in np.argwhere(self.board == 0)]
 
+    def print_board(self) -> None:
+        """
+        Print the board in a formatted way.
+        'B' (black) represent pieces of player 1 and 'W' (white) represent prices of player 2
+        """
+        board_size = self.board_size
+        # Print column headers
+        header = "   " + "   ".join(str(i) for i in range(board_size))
+        print(header)
+        print("  " + "----" * (board_size - 1) + "----")  # Top border
+
+        for row in range(board_size):
+            row_content = []
+            for col in range(board_size):
+                cell = self.board[row, col]
+                if cell == 1:
+                    row_content.append(" B ")
+                elif cell == -1:
+                    row_content.append(" W ")
+                else:
+                    row_content.append("   ")
+
+            row_str = "|".join(row_content)
+            # Print row with row number
+            print(f"{row} |{row_str}|")
+            print("  " + "----" * (board_size - 1) + "----")
+
+
+
 # if __name__ == "__main__":
 #     game = Pentago()
 #     game.board = np.array([
