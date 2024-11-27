@@ -5,18 +5,22 @@ from typing import Union, List
 
 
 class Pentago:
-    def __init__(self):
+    def __init__(self, board_size=6, quadrant_size=3, win_length=5):
         """
-        :param current_player:
+        :param board_size: the original Pentago is 6X6 size
+        :param quadrant_size: original quadrant_size is 3X3
+        :param win_length: original win condition is 5 in a row
+        :param current_player: set the first player's id as 1
         :param quadrant_start: indicate the top-left corner cell coordinate of each quadrant, there are four quadrants ,
-        I assume the top-left one is number 0, top-right one is number 1, bottom-left one is number 2, and bottom-right
-        one is number 3.
+        I assume the top-left quadrant is number 0, top-right quadrant is number 1, bottom-left quadrant is number 2,
+        and bottom-right quadrant is number 3.
         """
-        self.board_size = 6
+        self.board_size = board_size
+        self.quadrant_size = quadrant_size
+        self.win_length = win_length
         self.board = np.array([[0] * self.board_size for _ in range(self.board_size)])
-        self.quadrant_start = [(0, 0), (0, 3), (3, 0), (3, 3)]
+        self.quadrant_start = [(0, 0), (0, quadrant_size), (quadrant_size, 0), (quadrant_size, quadrant_size)]
         self.current_player = 1
-        self.win_length = 5
 
     def rotate_quadrant(self, quadrant: int, direction: int) -> bool:
         """
@@ -25,7 +29,7 @@ class Pentago:
         :return: bool
         """
         start_row, start_col = self.quadrant_start[quadrant]
-        sub_board = self.board[start_row: start_row+3, start_col: start_col+3]
+        sub_board = self.board[start_row: start_row+self.quadrant_size, start_col: start_col+self.quadrant_size]
         if direction == 1:
             rotated = np.rot90(sub_board, k=-1)  # clockwise rotate
         elif direction == -1:
@@ -104,14 +108,13 @@ class Pentago:
         :return: False if exist no winner, player number of winner if exist winner
         """
         diagonal_range = self.board_size - self.win_length + 1
-        left_start_points = []
-        right_start_points = []
-        for i in range(diagonal_range):
-            for j in range(diagonal_range):
-                top_left = (i, j)
-                top_right = (i, self.board_size-1-j)
-                left_start_points.append(top_left)
-                right_start_points.append(top_right)
+        left_start_points = [(0, self.board_size-1)]  # top left corner
+        right_start_points = [(0, 0)]  # top right corner
+        for i in range(0, diagonal_range):
+            left = [(i, 0), (0, i)]
+            right = [(i, self.board_size-1), (0, self.board_size-1-i)]
+            left_start_points += left
+            right_start_points += right
 
         for player in [-1, 1]:
             for i in range(self.board_size):  # column and rows check

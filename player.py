@@ -182,8 +182,8 @@ class AIPlayer:
             opponent_count = np.sum(window == opponent)
 
             if opponent_count == 0:  # When no opponent piece blocks in this segment, possibly win
-                score += 10 ** player_count  # Exponential scaling for player's pieces
+                score += 10 ** player_count
             elif player_count == 0:  # When no own piece in this segment
-                score -= 5 ** opponent_count  # Exponential scaling for opponent's pieces
+                score -= 5 ** opponent_count
 
         return score
