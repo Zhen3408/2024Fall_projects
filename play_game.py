@@ -20,8 +20,8 @@ if __name__ == "__main__":
     game_mode = int(input('Input your choice:'))
 
     # initiate both players based on user choice
-    player1 = HumanPlayer(1) if game_mode in [1,2] else AIPlayer(1, depth=2)
-    player2 = HumanPlayer(-1) if game_mode == 1 else AIPlayer(-1, depth=2)
+    player1 = HumanPlayer(player_id=1) if game_mode in [1,2] else AIPlayer(player_id=1)
+    player2 = HumanPlayer(player_id=-1) if game_mode == 1 else AIPlayer(player_id=-1)
 
     while True:
         game.print_board()

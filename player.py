@@ -18,7 +18,7 @@ class HumanPlayer:
         :param game: The current game instance, for validating input and displaying board state.
         :return: A tuple (row, col, quadrant, direction)
         """
-        print(f"Human Player #{self.player_number} turn:")
+        print(f"Round{game.game_round} - Human Player #{self.player_number} turn:")
         while True:
             try:
                 # Get user input
@@ -55,8 +55,12 @@ class AIPlayer:
         :param game: The current game instance.
         :return: A tuple (row, col, quadrant, direction)
         """
-        print(f"AI Player #{self.player_number} turn:")
-
+        print(f"Round{game.game_round} - AI Player #{self.player_number} turn!")
+        early_stage = game.board_size  # set early stage round based on board size, prevent 'slow' early decision in 8X8
+        if game.board_size == 8 and game.game_round <= early_stage:  # when get into later stage of game, simulate deeper
+            self.depth = 1
+        else:
+            self.depth = 2
         best_value, best_move = self.minimax(game, self.depth, -float('inf'), float('inf'), True)
 
         if best_move is None:

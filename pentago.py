@@ -11,6 +11,7 @@ class Pentago:
         :param quadrant_size: original quadrant_size is 3X3
         :param win_length: original win condition is 5 in a row
         :param current_player: set the first player's id as 1
+        :param game_round: indicate which round the game is at
         :param quadrant_start: indicate the top-left corner cell coordinate of each quadrant, there are four quadrants ,
         I assume the top-left quadrant is number 0, top-right quadrant is number 1, bottom-left quadrant is number 2,
         and bottom-right quadrant is number 3.
@@ -21,6 +22,7 @@ class Pentago:
         self.board = np.array([[0] * self.board_size for _ in range(self.board_size)])
         self.quadrant_start = [(0, 0), (0, quadrant_size), (quadrant_size, 0), (quadrant_size, quadrant_size)]
         self.current_player = 1
+        self.game_round = 1
 
     def rotate_quadrant(self, quadrant: int, direction: int) -> bool:
         """
@@ -50,6 +52,7 @@ class Pentago:
         self.board[row][col] = self.current_player
         self.rotate_quadrant(quadrant, direction)
         self.current_player *= -1
+        self.game_round += 1
         return True
 
     def is_move_legal(self, row, col, quadrant, direction) -> bool:
