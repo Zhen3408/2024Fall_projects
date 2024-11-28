@@ -42,4 +42,8 @@ The overall time for this game from start to end is about 3 minutes. We can see 
 
 **Starting the game in 8X8 mode and choose the AI player vs AI player**
 
-The AI player makes move extremely slow at the early stage, since the time complexity mentioned earlier is about _O(n^2)_, n is the board length. The increase of board size makes the time complexity of heuristic function grow exponentially. 
+The profiler pictures for a 8X8 AI vs AI player shows below :
+
+![8x8 AI vs AI](./read_picture/8X8_AIvsAI.png)
+
+The AI player makes move extremely slow at the early stage, since the time complexity mentioned earlier is about _O(n^2)_, n is the board length. The increase of board size makes the time complexity of heuristic function grow exponentially. To improve this, I set the initial simulation depth as 1 for the first 8 rounds. This way, even though still pretty slow, it won't spend so much time on an empty board, instead, it will start simulate deeper from round 9.
