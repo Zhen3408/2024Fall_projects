@@ -37,7 +37,7 @@ class Pentago:
         else:
             return False
         # substitute the rotated sub board back to the big board
-        self.board[start_row: start_row+3, start_col: start_col+3] = rotated
+        self.board[start_row: start_row+self.quadrant_size, start_col: start_col+self.quadrant_size] = rotated
         return True
 
     def make_move(self, row, col, quadrant, direction) -> bool:

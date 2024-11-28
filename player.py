@@ -150,34 +150,34 @@ class AIPlayer:
 
             # Rows and columns
             for i in range(game.board_size):
-                score += factor * self.evaluate_line(game.board[i, :], player)
-                score += factor * self.evaluate_line(game.board[:, i], player)
+                score += factor * self.evaluate_line(game.board[i, :], player, game.win_length)
+                score += factor * self.evaluate_line(game.board[:, i], player, game.win_length)
 
             # Diagonals
             for row in range(game.board_size - game.win_length + 1):
                 for col in range(game.board_size - game.win_length + 1):
                     diag1 = np.diagonal(game.board[row:row + game.win_length, col:col + game.win_length])
                     diag2 = np.diagonal(np.fliplr(game.board[row:row + game.win_length, col:col + game.win_length]))
-                    score += factor * self.evaluate_line(diag1, player)
-                    score += factor * self.evaluate_line(diag2, player)
+                    score += factor * self.evaluate_line(diag1, player, game.win_length)
+                    score += factor * self.evaluate_line(diag2, player, game.win_length)
         return score
 
-    def evaluate_line(self, line: np.ndarray, player: int) -> int:
+    def evaluate_line(self, line: np.ndarray, player: int, win_length: int) -> int:
         """
         Evaluates a single line (row, column, or diagonal) for potential scores.
         :param line: A line from the board.
         :param player: The player id to evaluate for (1 or -1).
+        :param win_length: The number of consecutive cells to achieve win
         :return: Score for the given line.
         """
         score = 0
         opponent = -player
-        win_length = 5
 
-        # Sliding window over the line to evaluate all possible 5-length segments
+        # Sliding window over the line to evaluate all possible win-length segments
         for i in range(len(line) - win_length + 1):
             window = line[i:i + win_length]
 
-            # Count player and opponent pieces in the segment of 5 cells
+            # Count player and opponent pieces in the segment of cells of the win length(5 or 6)
             player_count = np.sum(window == player)
             opponent_count = np.sum(window == opponent)
 

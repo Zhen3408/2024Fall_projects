@@ -4,6 +4,15 @@ from pentago import Pentago
 
 
 if __name__ == "__main__":
+    print('Choose which size of board you like:\n'
+          '1. 6x6 Pentago: Four 3X3 quadrants, FIVE in a row wins.\n'
+          '2. 8X8 Pentago: Four 4X4 quadrants, SIX in a row wins.')
+    board_size = int(input('Input your choice:'))
+    if board_size == 1:
+        game = Pentago()
+    else:
+        game = Pentago(board_size=8, quadrant_size=4, win_length=6)
+
     print('Choose the game pattern you like:\n'
           '1. Human Player VS Human Player.\n'
           '2. Human Player VS Computer Player.\n'
@@ -11,7 +20,6 @@ if __name__ == "__main__":
     game_mode = int(input('Input your choice:'))
 
     # initiate both players based on user choice
-    game = Pentago()
     player1 = HumanPlayer(1) if game_mode in [1,2] else AIPlayer(1, depth=2)
     player2 = HumanPlayer(-1) if game_mode == 1 else AIPlayer(-1, depth=2)
 
