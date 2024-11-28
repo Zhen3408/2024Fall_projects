@@ -14,7 +14,7 @@ The variation I built upon the original Pentago is changing the board to four 4Ã
 
 The AI player is implemented based on Minimax algorithm and alpha-beta pruning.
 
-## How to Start Game:
+## To Start Playing Game:
 
 Execute the ```play_game.py``` file, follow the text prompt to choose whether play 6X6 or 8X8 board size. Then choose the game mode either play computer-vs-computer and/or against human players. When you play as a human player, input the move you want in this format: ```row, col, quadrant, direction```. ```row``` and ```col``` index is labeled in the printed text board. For ```quadrant```,  the top-left quadrant is number 0, top-right quadrant is number 1, bottom-left quadrant is number 2, and bottom-right quadrant is number 3. For ```direction```, 1 means rotate clockwise, -1 means rotate counterclockwise. For example, if you input ```1, 2, 1, -1```, your move is placing a piece on the cell of row 1 column 2 and then rotate the quadrant on top-right counterclockwise.
 
