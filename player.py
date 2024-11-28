@@ -172,18 +172,41 @@ class AIPlayer:
         """
         score = 0
         opponent = -player
+        win_length = win_length
+        player_count = 0
+        opponent_count = 0
 
-        # Sliding window over the line to evaluate all possible win-length segments
-        for i in range(len(line) - win_length + 1):
-            window = line[i:i + win_length]
+        # Initialize the first window
+        for i in range(win_length):
+            if line[i] == player:
+                player_count += 1
+            elif line[i] == opponent:
+                opponent_count += 1
 
-            # Count player and opponent pieces in the segment of cells of the win length(5 or 6)
-            player_count = np.sum(window == player)
-            opponent_count = np.sum(window == opponent)
+        # Score the first window
+        if opponent_count == 0:
+            score += 10 ** player_count
+        elif player_count == 0:
+            score -= 5 ** opponent_count
 
-            if opponent_count == 0:  # When no opponent piece blocks in this segment, possibly win
+        # Slide the window across the line
+        for i in range(win_length, len(line)):
+            # Remove the element going out of the window
+            if line[i - win_length] == player:
+                player_count -= 1
+            elif line[i - win_length] == opponent:
+                opponent_count -= 1
+
+            # Add the new element coming into the window
+            if line[i] == player:
+                player_count += 1
+            elif line[i] == opponent:
+                opponent_count += 1
+
+            # Score the current window
+            if opponent_count == 0:
                 score += 10 ** player_count
-            elif player_count == 0:  # When no own piece in this segment
+            elif player_count == 0:
                 score -= 5 ** opponent_count
 
         return score
