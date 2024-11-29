@@ -105,9 +105,10 @@ class Pentago:
 
     def check_winner(self) -> Union[int, bool]:
         """
-        check if exist 5 consecutive marble on board
-        for diagonal check, I find all diagonal starting cell coordinate on top of the board, whether top-left to
-        bottom-right or top-right to bottom-left
+        Check if exist 5 consecutive marble on board
+        For diagonal check, find all diagonal starting cell coordinate on top of the board, whether top-left to
+        bottom-right or top-right to bottom-left。
+        If both players achieve the win condition simultaneously after a quadrant rotation, it is a draw.
         :return: False if exist no winner, player number of winner if exist winner
         """
         diagonal_range = self.board_size - self.win_length + 1
@@ -119,19 +120,26 @@ class Pentago:
             left_start_points += left
             right_start_points += right
 
+        winner = set()
+
         for player in [-1, 1]:
             for i in range(self.board_size):  # column and rows check
                 if self.check_consecutive(self.board[i,:], player):
-                    return player
+                    winner.add(player)
                 if self.check_consecutive(self.board[:,i], player):
-                    return player
+                    winner.add(player)
 
             for cell in left_start_points:  # left to right diagonal
                 if self.check_diagonal(cell, player, 1):
-                    return player
+                    winner.add(player)
             for cell in right_start_points:  # right to left diagonal
                 if self.check_diagonal(cell, player, -1):
-                    return player
+                    winner.add(player)
+
+        if len(winner) > 1:
+            return "draw"  # both players win simultaneously, it's a draw
+        elif len(winner) == 1:
+            return winner.pop()  # only one player wins
 
         return False
 
@@ -179,16 +187,16 @@ class Pentago:
             print("  " + "----" * (board_size - 1) + "----")
 
 
-
 # if __name__ == "__main__":
 #     game = Pentago()
 #     game.board = np.array([
-#         [1, 1, 1, 1, -1, 1],
-#         [-1, -1, -1, 1, -1, 1],
-#         [-1, -1, -1, 1, -1, -1],
-#         [1, -1, 1, 1, 1, 1],
-#         [1, -1, 1, -1, -1, -1],
-#         [-1, 1, -1, 1, -1, 1]
+#         [1, -1, 0, 1, 1, 0],
+#         [1, -1, 0, -1, -1, 0],
+#         [1, -1, 0, 1, -1, 0],
+#         [1, 0, 0, 0, 0, 0],
+#         [0, 0, 0, 0, 0, 0],
+#         [0, 0, 0, 0, 0, 0]
 #     ])
+#     game.make_move(5, 5, 0, 1)
 #
-#     print("Is draw:", game.is_draw(game.check_winner()))  #  True
+#     print(game.check_winner())

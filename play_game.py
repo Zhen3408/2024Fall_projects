@@ -43,9 +43,11 @@ if __name__ == "__main__":
             break
 
         if winner:
-            print(game.board)
+            game.print_board()
             if winner == 1:
                 print("Player #1 wins!")
-            else:
+            elif winner == -1:
                 print("Player #2 wins!")
+            else:
+                print("Both Players Achieve Win Condition. This game is a draw!")
             break
